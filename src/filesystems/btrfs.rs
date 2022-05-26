@@ -3,31 +3,19 @@ use crate::filesystem;
 pub struct BTRFS {}
 
 impl filesystem::Filesystem for BTRFS {
-    fn create_snapshot(&self, subvolume: &filesystem::Subvolume) -> filesystem::Snapshot {
-        filesystem::Snapshot {
-            name: String::from(""),
-            used_space: 0,
-            mountpoint: String::from("")
-        }
+    fn create_snapshot(&self, _subvolume: &filesystem::Subvolume) -> filesystem::Snapshot {
+        unimplemented!("The BTRFS filesystem backend is not yet implemented!");
     }
 
-    fn delete_snapshot(&self, snapshot: &filesystem::Snapshot) -> () {
-
+    fn delete_snapshot(&self, _snapshot: &filesystem::Snapshot) -> () {
+        unimplemented!("The BTRFS filesystem backend is not yet implemented!");
     }
 
     fn list_snapshots(&self) -> Vec<filesystem::Snapshot> {
-        vec![filesystem::Snapshot {
-            name: String::from(""),
-            used_space: 0,
-            mountpoint: String::from("")
-        }]
+        unimplemented!("The BTRFS filesystem backend is not yet implemented!");
     }
 
     fn list_subvolumes(&self) -> Vec<filesystem::Subvolume> {
-        vec![filesystem::Subvolume {
-            name: String::from(""),
-            mountpoint: String::from(""),
-            used_space: 0,
-        }]
+        unimplemented!("The BTRFS filesystem backend is not yet implemented!");
     }
 }
