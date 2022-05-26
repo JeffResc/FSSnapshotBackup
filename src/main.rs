@@ -62,25 +62,35 @@ fn main() {
         std::process::exit(1);
     }
 
-    let filesystem = filesystems::filesystem(cli.filesystem.to_string());
-    let utility = utilities::utility(cli.utility.to_string());
+    let filesystem = filesystems::filesystem(cli.filesystem.to_string().to_lowercase());
+    //let utility = utilities::utility(cli.utility.to_string());
 
-    let (success, snapshot_name, snapshot_path) = filesystem.create_snapshot(&cli.subvolume.to_string());
-    if !success {
-        println!("Failed to create snapshot");
+    let subvolumes = filesystem.list_subvolumes();
+
+    let mut subvolume = filesystem::Subvolume {
+        name: String::from(""),
+        used_space: 0,
+        mountpoint: String::from(""),
+    };
+    for sv in subvolumes {
+        if sv.name == cli.subvolume {
+            subvolume = sv;
+        }
+    }
+    if subvolume.name == "" {
+        println!("Subvolume {:?} not found in filesystem {:?}", cli.subvolume, cli.filesystem);
         std::process::exit(1);
     }
 
-    let success = utility.backup(&snapshot_path, &cli.subvolume, &String::from(""));
-    if !success {
-        println!("Failed to backup snapshot");
-        std::process::exit(1);
-    }
+    let snapshot = filesystem.create_snapshot(&subvolume);
+    println!("Created snapshot {} {} {}", snapshot.name, snapshot.used_space, snapshot.mountpoint);
 
-    let success = filesystem.delete_snapshot(&cli.subvolume.to_string(), &snapshot_name);
-    if !success {
-        println!("Failed to delete snapshot");
-        std::process::exit(1);
-    }
+    //let success = utility.backup(&snapshot_path, &cli.subvolume, &String::from(""));
+
+    // let success = filesystem.delete_snapshot(&cli.subvolume.to_string(), &snapshot_name);
+    // if !success {
+    //     println!("Failed to delete snapshot");
+    //     std::process::exit(1);
+    // }
 
 }
